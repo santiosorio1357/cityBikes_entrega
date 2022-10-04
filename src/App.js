@@ -1,24 +1,36 @@
-import logo from './logo.svg';
-import './App.css';
+import React, {useEffect, useState} from 'react'
+import Navbar from './components/Navbar'
+import Networks from './components/Networks'
 
 function App() {
+  
+  const [networks, setNetworks] = useState([]);
+
+  let inicialUrl = "http://api.citybik.es/v2/networks";
+
+  const fetchNetworks = (url) =>{
+    fetch(url)
+        .then(response => response.json())
+        .then(data => setNetworks(data.networks))
+        .catch(error => console.log(error))
+  };
+
+  useEffect(() =>{
+    fetchNetworks(inicialUrl)
+
+  },[])
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <Navbar brand={"CityBikes app"}/>
+      <div className='container mt-4'>
+        <center>
+          <h2 className='card-title'>EMPRESAS</h2>
+          <hr />
+        </center>
+        <Networks networks={networks}/>
+      </div>
+    </>
   );
 }
 
